@@ -13,21 +13,54 @@ You can also **download from this document.**
 |Version| Download |
 |--|--|
 | `Latest` | [`Download Link`](https://github.com/elModo7/Tunnel_Manager/releases/latest/download/TunnelManager.zip)  |
+| 1.3.0 | [Download Link](https://github.com/elModo7/Tunnel_Manager/releases/download/1.3.0/TunnelManager.zip)  |
 | 1.2.29 | [Download Link](https://github.com/elModo7/Tunnel_Manager/releases/download/1.2.29/TunnelManager.zip)  |
 
-## Sample Usage (Secure VNC Session)
-
+## Sample Usage
+### Secure VNC Session
 ```mermaid
 sequenceDiagram
-Server ->> SSH Server: Forward port 5900 to 8034 (SSH)
+VNC Server ->> SSH Server: Forward port 5900 to 8034 (SSH)
 Note right of SSH Server: Proxying 5900:8034
-Client--x Server: I want to connect securely thorugh VNC 5900
-Server-->> Client: VNC is not encrypted but I can tunnel it through 8034
+Client--x VNC Server: I want to connect securely thorugh VNC 5900
+VNC Server-->> Client: VNC is not encrypted but I can tunnel it through 8034
 Client->> SSH Server: Connect to VNC:8034
-Server->> Client: I am sharing a secure VNC Session!
+VNC Server->> Client: I am sharing a secure VNC Session!
 Note right of Client: The client has<br/>established a secure<br/>connection with the<br/>server by tunneling<br/>the VNC session<br/>through SSH.
 
 ```
+
+### Firewall Bypass (could be reversed)
+```mermaid
+sequenceDiagram
+Web Server --x Firewall: I want to expose port 80
+Firewall -->> Web Server: Nope
+Web Server-->> SSH Proxy: Forward port 80 to port 8080
+SSH Proxy-->>Web Server: OK
+Client->> SSH Proxy: https://proxy:8080
+SSH Proxy->>Web Server: Client asks for your index.html on port 80
+Web Server->> SSH Proxy: Here you have index.html
+SSH Proxy->> Client: This is index.html
+Client->> Web Server: Obtained index.html from Web Server proxying through SSH Proxy
+Note right of Client: Client got index.html<br/>from the Web Server<br/>that was behind a<br/>restrictive firewall<br/>by proxying the<br/>request through the<br/>SSH Proxy.
+
+```
+
+### More Use Cases
+- Example of Tunnel Manager Use Cases and Scenarios
+Sharing Network Access - If you need to work from home and access your company's internal network, which only allows access from within the network, you can install the Tunnel Manager agent on a computer located within your company's premises. This will enable you to utilize its internet access[^1] without depending on the company's remote access tools.
+
+- Access to Devices Without VPN Support - Suppose you have a device that does not support VPN, such as an IoT sensor, CCTV camera, or smart TV, and you want to access them from your laptop on a different network that cannot directly reach the device. In this case, you can install the Tunnel Manager agent on a device within the same network as these devices. Then, you can connect using your laptop through Tunnel Manager from anywhere.
+
+- Using Native Services like RDP/SSH Across Different Networks - You can use Tunnel Manager to access your computer's native services like RDP (Remote Desktop) or SSH directly, without relying on third-party services. This is especially useful when both machines cannot reach each other directly, and neither has a public IP address. Tunnel Manager allows you to use your SSH or RDP client (e.g., OpenSSH client or Microsoft Remote Desktop) without the need for any modifications or additional software to connect to your computer.
+
+- Publishing a Local Webserver - Suppose you have a webserver running on your local network that you want to make accessible on the internet. If your ISP doesn't provide you with a public IP address or you wish to let others publish their webservers on your public IP address from their local networks, Tunnel Manager can help you publish your webserver to the internet.
+
+## Architecture
+
+Tunnel Manager's architecture consists of three main components: the Gateway, Agents, and Clients. The Gateway serves as the central hub, routing packets between agents, clients, and browsers. Agents act as proxies, forwarding packets to or from targeted hosts within the local network. Clients send and receive packets to and from agents, facilitating communication with the Agent component. The Token Generator is responsible for generating tokens used for authentication and configuration within the Tunnel Manager network.
+
+<p align="center"><img src="https://i.postimg.cc/HxdC5hyF/Diagram.png" alt="Tunnel Manager Logo" width="80%"></p>
 
 #### Recommended sshd_config match user config:
     GatewayPorts yes
@@ -49,7 +82,7 @@ Note right of Client: The client has<br/>established a secure<br/>connection wit
 - Temporary Tunnels without Saving
 - Relaunch Tunnel on disconnect
 - No need for a full reload on profile select
-- Online version checker based on GitHub repo
+- Online version checker based on GitHub repo (1.3.0+)
 - Allow enabling/disabling per proflie+tunnel configuration
 - Keep track of last used profile (path)
 - Config checks on repeated/incorrect tunnel configurations (Improved in 1.2.11+)
@@ -102,6 +135,11 @@ Note right of Client: The client has<br/>established a secure<br/>connection wit
 ### Notification Settings
 ![Notification Settings](https://i.postimg.cc/pT73rPwB/Tunnel-Manager-yby9s-RCwd3.png)
 
+## References
 Tunnel Manager icon by [Hotpot.ai](https://hotpot.ai/)
 
+"More Use Cases" section and image diagram obtained from [Narrowlink](https://narrowlink.com/)
+
 **Víctor Santiago Martínez Picardo (elModo7)** 17/JAN/2024
+
+[^1]: Please ensure you have permission from your company and comply with your company's security policies before sharing internet access using Narrowlink. Narrowlink is not responsible for any misuse of the software.
