@@ -598,7 +598,8 @@ PICGUIEscape:
 return
 
 lookForUpdates:
-	gitHubVersion := urlDownloadToVar("https://raw.githubusercontent.com/elModo7/elmodo7.github.io/master/tunnel_manager/version")
+	gitHubData := JSON.Load(urlDownloadToVar("https://api.github.com/repos/elModo7/Tunnel_Manager/releases/latest"))
+	gitHubVersion := gitHubData.tag_name
 	versionDiff := VerCmp(gitHubVersion, version)
 	if(versionDiff == "-1"){
 		neutron.doc.getElementById("msgVersionCheck").innerHTML := "Your Tunnel Manager is more recent than the current public version:<br>Local: v" version "<br>Remote: v" gitHubVersion
