@@ -3,7 +3,7 @@
 ; OS Version ...: Windows 10 x64 and Above (Support not guaranteed on Windows 7)
 ;@Ahk2Exe-SetName elModo7's Tunnel Manager
 ;@Ahk2Exe-SetDescription SSH Tunnel Manager for proxying`, securing and pivoting.
-;@Ahk2Exe-SetVersion 1.3.0
+;@Ahk2Exe-SetVersion 1.3.1
 ;@Ahk2Exe-SetCopyright Copyright (c) 2024`, elModo7
 ;@Ahk2Exe-SetOrigFilename Tunnel Manager.exe
 ; INITIALIZE
@@ -76,7 +76,7 @@ FUTURE PLANS:
 #MaxHotkeysPerInterval, 999 ; Not really used but in case other programs may send hotkeys really fast ignoring this line could be an issue
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines, -1
-global version := "1.3.0"
+global version := "1.3.1"
 global isVisible := 1
 global cmdProxy, programData, programDataJson, notificationsData, notificationsDataJson, profile, mytcp
 
