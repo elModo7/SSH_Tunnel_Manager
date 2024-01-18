@@ -704,6 +704,18 @@ AHK_ICONCLICKNOTIFY(wParam,lParam)
 	return 0
 }
 
+showLicense(){
+	global neutron, nogui, silent, startHidden, autostart
+	if(!nogui && !silent && !startHidden && !autostart){
+		RegRead, firstRun, HKEY_CURRENT_USER\Software\elModo7's Tunnel Manager, FirstRun
+		if(firstRun == 0 || firstRun == ""){
+			RegWrite, REG_SZ, HKEY_CURRENT_USER\Software\elModo7's Tunnel Manager, FirstRun, 1
+			neutron.wnd.showLicenseModal()
+		}
+	}
+
+}
+
 closeApp(unhandledParam := ""){
 	gosub, ExitSub
 }
