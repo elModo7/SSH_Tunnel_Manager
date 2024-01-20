@@ -142,6 +142,8 @@ Tunnel Manager icon by [Hotpot.ai](https://hotpot.ai/)
 
 "More Use Cases" section and image diagram obtained from [Narrowlink](https://narrowlink.com/)
 
+[![Star History Chart](https://api.star-history.com/svg?repos=elmodo7/Tunnel_Manager&Date&type=Date)](https://star-history.com/#elmodo7/Tunnel_Manager&Date)
+
 **Víctor Santiago Martínez Picardo (elModo7)** 17/JAN/2024
 
 [^1]: Please ensure you have permission from your company and comply with your company's security policies before sharing internet access using Narrowlink. Narrowlink is not responsible for any misuse of the software.
