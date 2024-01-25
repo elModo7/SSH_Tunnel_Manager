@@ -146,4 +146,4 @@ Tunnel Manager icon by [Hotpot.ai](https://hotpot.ai/)
 
 **Víctor Santiago Martínez Picardo (elModo7)** 17/JAN/2024
 
-[^1]: Please ensure you have permission from your company and comply with your company's security policies before sharing internet access using Narrowlink. Narrowlink is not responsible for any misuse of the software.
+[^1]: Please ensure you have permission from your company and comply with your company's security policies before sharing internet access using Tunnel Manager. Tunnel Manager is not responsible for any misuse of the software.
