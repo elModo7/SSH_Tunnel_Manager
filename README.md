@@ -6,6 +6,7 @@ Tunnel Manager is a tool for **proxying, pivoting and securing connections over 
 It's basically a GUI wrapper for **plink** but adds **profiling, notifications** and is focused on **automation** and **session persistence**.
 It is written mainly in **[AutoHotkey](https://www.autohotkey.com/)** and the GUI framework that I used is [Neutron.ahk](https://github.com/G33kDude/Neutron.ahk), so it has a little bit of HTML, CSS (Bootstrap 3), JS and JQuery.
 > **Pro Tip:** Press **Ctrl** key while Tunnel Manager is active to change **"copy to clipboard"** icon into **"generate QR"** mode.
+
 ![Main Window](https://i.postimg.cc/j594P2dL/Tunnel-Manager-45ak-L0gkyg.png)
 I created a thread on the **[AutoHotkey Forums](https://www.autohotkey.com/boards/viewtopic.php?t=125013)** for discussion about Tunnel Manager, but I also read queries and suggestions on the **[AutoHotkey Discord](https://discord.com/invite/Aat7KHmG7v)**.
 
