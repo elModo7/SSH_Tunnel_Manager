@@ -1,6 +1,6 @@
 
 
-# <img src="https://i.postimg.cc/qv6ffhWv/topico-trans.png)" alt="topico" width="150"/> SSH Tunnel Manager 
+# <img src="https://i.postimg.cc/KY8q3ZPJ/topico-trans.png" alt="topico" width="150"/> SSH Tunnel Manager 
 
 Tunnel Manager is a tool for **proxying, pivoting and securing connections over SSH.**
 It's basically a GUI wrapper for **plink** but adds **profiling, notifications** and is focused on **automation** and **session persistence**.
@@ -133,7 +133,7 @@ Tunnel Manager's architecture consists of three main components: the Gateway, Ag
 
 ## Screenshots
 ### Server Settings
-![Server Config](https://i.postimg.cc/XqCc8Wpx/Tunnel-Manager-f7-Jjs-Ta4tt.png)
+![Server Config](https://i.postimg.cc/ZqsN7m17/Tunnel-Manager-zgx-IL9-Seq5.png)
 ### Notification Settings
 ![Notification Settings](https://i.postimg.cc/pT73rPwB/Tunnel-Manager-yby9s-RCwd3.png)
 
