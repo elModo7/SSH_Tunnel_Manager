@@ -16,7 +16,7 @@ Go check **[releases](https://github.com/elModo7/Tunnel_Manager/releases)** for 
 You can also **download from this document.**
 |Version| Download |
 |--|--|
-| `Latest` | [`Download Link`](https://github.com/elModo7/Tunnel_Manager/releases/latest/download/TunnelManager.zip)  |
+| `Latest` | [`Download Link`](https://github.com/elModo7/Tunnel_Manager/releases/latest/download/Tunnel.Manager.exe)  |
 | 1.3.0 | [Download Link](https://github.com/elModo7/Tunnel_Manager/releases/download/1.3.0/TunnelManager.zip)  |
 | 1.2.29 | [Download Link](https://github.com/elModo7/Tunnel_Manager/releases/download/1.2.29/TunnelManager.zip)  |
 
