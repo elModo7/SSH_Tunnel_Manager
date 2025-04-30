@@ -1,10 +1,10 @@
 ﻿global compiledForConsole := 0 ; ¡¡Important!! Depending on how you want to compile the script, output will be given via console (Chalk) or native MsgBox
-; Last changed date: 17/01/2024 20:15
+; Last changed date: 30/04/2025 19:15
 ; OS Version ...: Windows 10 x64 and Above (Support not guaranteed on Windows 7)
 ;@Ahk2Exe-SetName elModo7's Tunnel Manager
 ;@Ahk2Exe-SetDescription SSH Tunnel Manager for proxying`, securing and pivoting.
-;@Ahk2Exe-SetVersion 1.3.1
-;@Ahk2Exe-SetCopyright Copyright (c) 2024`, elModo7
+;@Ahk2Exe-SetVersion 1.3.2
+;@Ahk2Exe-SetCopyright Copyright (c) 2025`, elModo7
 ;@Ahk2Exe-SetOrigFilename Tunnel Manager.exe
 ; INITIALIZE
 ; *******************************
@@ -55,6 +55,7 @@ FEATURES:
 - Fully Open Source (1.2.29+)
 - Remove DRM Protection (No Serial Required) (1.2.29+)
 - Track Updates with GitHub Releases (https://api.github.com/repos/elModo7/Tunnel_Manager/releases/latest) (1.3.0+)
+- Add About window and Icons to Tray Menu (1.3.2+)
 
 DROPPED / DISCARDED:
 - Keep Serial active for 7 days before asking again (DRM Security Risk)
@@ -76,12 +77,20 @@ FUTURE PLANS:
 #MaxHotkeysPerInterval, 999 ; Not really used but in case other programs may send hotkeys really fast ignoring this line could be an issue
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines, -1
-global version := "1.3.1"
+global version := "1.3.2"
 global isVisible := 1
 global cmdProxy, programData, programDataJson, notificationsData, notificationsDataJson, profile, mytcp
 
 plinkPromptDownload() ; PLink install
 FileInstall, lib/quricol64.dll, % A_Temp "\quricol64.dll", 0 ; Install but do not overwrite quircol64.dll
+FileCreateDir, % A_Temp "\Tunnel_Manager"
+FileInstall, res/ico/network2.ico, % A_Temp "\Tunnel_Manager\network2.ico" 
+FileInstall, res/ico/refresh.ico, % A_Temp "\Tunnel_Manager\refresh.ico" 
+FileInstall, res/ico/cut_visibility.ico, % A_Temp "\Tunnel_Manager\cut_visibility.ico" 
+FileInstall, res/ico/download.ico, % A_Temp "\Tunnel_Manager\download.ico" 
+FileInstall, res/ico/info.ico, % A_Temp "\Tunnel_Manager\info.ico" 
+FileInstall, res/ico/close3.ico, % A_Temp "\Tunnel_Manager\close3.ico" 
+FileInstall, res/ico/blocked.ico, % A_Temp "\Tunnel_Manager\blocked.ico" 
 
 #Include <cJSON>
 #Include <aes_crypt>
@@ -148,15 +157,22 @@ if(notray){
 	Menu, Tray, NoStandard
 	Menu, Tray, Tip, Tunnel Manager elModo7 %version%
 	Menu, Tray, Add, Start Tunneling, toggleTunneling
+	Menu tray, Icon, Start Tunneling, % A_Temp "\Tunnel_Manager\network2.ico"
 	Menu, Tray, Add, Restart Tunneling, runTunnel
+	Menu tray, Icon, Restart Tunneling, % A_Temp "\Tunnel_Manager\refresh.ico"
 	Menu, Tray, Add,
 	if(!nogui)
 	{
 		Menu, Tray, Add, Hide Client, toggleVisibility
+		Menu tray, Icon, Hide Client, % A_Temp "\Tunnel_Manager\cut_visibility.ico"
 		Menu, Tray, Add, Look for Updates, lookForUpdates
+		Menu tray, Icon, Look for Updates, % A_Temp "\Tunnel_Manager\download.ico"
 	}
 	Menu, Tray, Add
+	Menu, tray, add, % "Tunnel Manager Info", showAboutScreen
+	Menu tray, Icon, % "Tunnel Manager Info", % A_Temp "\Tunnel_Manager\info.ico"
 	Menu, Tray, Add, Exit, ExitSub
+	Menu tray, Icon, Exit, % A_Temp "\Tunnel_Manager\close3.ico"
 }
 
 if(!nogui){
@@ -470,11 +486,13 @@ setTrayTunneling(alreadyTunneling = 0){
 	if(!tunneling){
 		if(!notray)			
 			Menu, tray, Rename, Stop Tunneling, Start Tunneling
+			Menu tray, Icon, Start Tunneling, % A_Temp "\Tunnel_Manager\network2.ico"
 		if(!nogui)
 			neutron.wnd.stopTunnelVisual()
 	}else if(!alreadyTunneling){
 		if(!notray)
 			Menu, tray, Rename, Start Tunneling, Stop Tunneling
+			Menu tray, Icon, Stop Tunneling, % A_Temp "\Tunnel_Manager\blocked.ico"
 		if(!nogui)
 			neutron.wnd.runTunnelVisual()
 	}
@@ -730,11 +748,17 @@ ExitSub:
 	RunWait, taskkill /IM proxy.exe /F,, Hide
 ExitApp
 
+showAboutScreen:
+	showAboutScreen("SSH Tunnel Manager v" version, "Network tool for proxying, pivoting, bypassing firewalls and securing connections over SSH. This app does heavy use of plink.exe")
+return
+
 ; Hotkeys
 #If WinActive("Tunnel Manager - elModo7 Soft")
 	*~Control::neutron.wnd.setQRMode()
 	*~Control Up::neutron.wnd.revertQRMode()
 #If
+
+#Include <aboutScreen>
 
 ; Neutron's FileInstall Resources
 FileInstall, Tunnel_manager.html, Tunnel_manager.html
