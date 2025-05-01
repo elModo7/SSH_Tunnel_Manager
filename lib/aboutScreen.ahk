@@ -1,9 +1,18 @@
-﻿; About Screen for my projects v0.0.4
+﻿; About Screen for my projects v0.0.5
 ; TODO: Add social media icons (github, youtube, linkedin, instagram, twitter?)
 FileCreateDir % A_Temp "/font"
 FileInstall, res\font\BaiJamjuree.ttf, % A_Temp "\font\BaiJamjuree.ttf", 0
 global fnt := A_Temp "\font\BaiJamjuree.ttf"
 global font1 := New CustomFont(fnt)
+FileCreateDir % A_Temp "/img"
+FileInstall, res\img\github.png, % A_Temp "\img\github.png", 0
+FileInstall, res\img\youtube.png, % A_Temp "\img\youtube.png", 0
+FileInstall, res\img\linkedin.png, % A_Temp "\img\linkedin.png", 0
+FileInstall, res\img\instagram.png, % A_Temp "\img\instagram.png", 0
+FileInstall, res\img\twitter.png, % A_Temp "\img\twitter.png", 0
+FileInstall, res\img\discord.png, % A_Temp "\img\discord.png", 0
+FileInstall, res\img\portfolio.png, % A_Temp "\img\portfolio.png", 0
+FileInstall, res\img\linktree.png, % A_Temp "\img\linktree.png", 0
 
 ;~ showAboutScreen("My APP", "This app does amazing things.")
 showAboutScreen(title, description){
@@ -32,18 +41,59 @@ showAboutScreen(title, description){
 	Gui about:Font, s16 c0x8080FF, Bai Jamjuree Bold
 	Gui about:Add, Text, x152 y8 w386 h23 +0x200, % title
 	Gui about:Font, s12 c0x00FF80, Bai Jamjuree Bold
-	Gui about:Add, Text, x16 y136 w128 h35 +Center, elModo7
+	Gui about:Add, Text, x16 y136 w128 h60 +Center, elModo7
+	Gui about:Font, s12 c0x80FFFF, Bai Jamjuree Bold
+	Gui about:Add, Text, x16 y156 w128 h60 +Center, VictorDevLog
 	Gui about:Font, s12 c0x80FFFF, Bai Jamjuree
 	Gui about:Add, Text, x152 y32 w412 h103 +Left, % description
 	Gui about:Font, s10 c0xFFFF80, Bai Jamjuree
-	Gui about:Add, Text, x152 y150 w413 h35 +Right, Víctor Santiago Martínez Picardo (elModo7 / VictorDevLog) %A_YYYY%
-	Gui about:Font, s16
 	Gui about:Add, Picture, x544 y8 w21 h20 gAboutGuiClose, % "HBITMAP:*" exitButton
-	Gui about:Show, w573 h179, About Window
+	Gui about:Add, Picture, x248 y136 w32 h32 glinkGithub, % A_Temp "\img\github.png"
+	Gui about:Add, Picture, x288 y136 w32 h32 glinkYoutube, % A_Temp "\img\youtube.png"
+	Gui about:Add, Picture, x408 y136 w32 h32 glinkLinkedin, % A_Temp "\img\linkedin.png"
+	Gui about:Add, Picture, x448 y136 w32 h32 glinkInstagram, % A_Temp "\img\instagram.png"
+	Gui about:Add, Picture, x488 y136 w32 h32 glinkTwitter, % A_Temp "\img\twitter.png"
+	Gui about:Add, Picture, x528 y136 w32 h32 glinkDiscord, % A_Temp "\img\discord.png"
+	Gui about:Add, Picture, x328 y136 w32 h32 glinkPortfolio, % A_Temp "\img\portfolio.png"
+	Gui about:Add, Picture, x368 y136 w32 h32 glinkLinktree, % A_Temp "\img\linktree.png"
+	Gui about:Add, Text, x152 y175 w413 h35 +Right, Víctor Santiago Martínez Picardo (elModo7 / VictorDevLog) %A_YYYY%
+	Gui about:Show, w573 h200, About Window
 }
 
 AboutGuiClose(){
 	Gui, about:destroy
+}
+
+linkGithub(){
+	Run, https://github.com/elModo7
+}
+
+linkYoutube(){
+	Run, https://www.youtube.com/@VictorDevLog?sub_confirmation=1
+}
+
+linkLinkedin(){
+	Run, https://www.linkedin.com/in/victor-smp
+}
+
+linkInstagram(){
+	Run, https://www.instagram.com/victordevlogyt
+}
+
+linkTwitter(){
+	Run, https://x.com/VictorDevLog
+}
+
+linkDiscord(){
+	Run, https://discord.gg/aYFXQjGA6b
+}
+
+linkPortfolio(){
+	Run, https://elmodo7.github.io/
+}
+
+linkLinktree(){
+	Run, https://linktr.ee/VictorDevLog
 }
 
 GdipCreateFromBase64(B64, RetType := 0) { ; 0=pBitmap, 1=HICON, 2=HBITMAP
