@@ -4,9 +4,12 @@
 
 Tunnel Manager is a tool for **proxying, pivoting and securing connections over SSH.**
 It's basically a GUI wrapper for **plink** but adds **profiling, notifications** and is focused on **automation** and **session persistence**.
-It is written mainly in **[AutoHotkey](https://www.autohotkey.com/)** and the GUI framework that I used is [Neutron.ahk](https://github.com/G33kDude/Neutron.ahk), so it has a little bit of HTML, CSS (Bootstrap 3), JS and JQuery.
+
+> **TLDR:** Use your Raspberry Pi or alike as a VPN/Proxy server for either securing connections, bypassing restrictions or even exposing local ports on restrictive networks.
 
 > **Caution:** Tunnel Manager **_compiled versions may be flaged as malware_** due to the nature of the program. You can **run from source directly using *AutoHotkey.exe* interpreter** to mostly avoid this.
+
+It is written mainly in **[AutoHotkey](https://www.autohotkey.com/)** and the GUI framework that I used is [Neutron.ahk](https://github.com/G33kDude/Neutron.ahk), so it has a little bit of HTML, CSS (Bootstrap 3), JS and JQuery.
 
 I created a thread on the **[AutoHotkey Forums](https://www.autohotkey.com/boards/viewtopic.php?t=125013)** for discussion about Tunnel Manager, but I also read questions and suggestions on the **[AutoHotkey Discord](https://discord.com/invite/Aat7KHmG7v)**.
 
