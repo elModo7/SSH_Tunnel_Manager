@@ -1,10 +1,10 @@
 ﻿global compiledForConsole := 0 ; ¡¡Important!! Depending on how you want to compile the script, output will be given via console (Chalk) or native MsgBox
-; Last changed date: 30/04/2025 19:15
+; Last changed date: 23/10/2025 19:15
 ; OS Version ...: Windows 10 x64 and Above (Support not guaranteed on Windows 7)
 ;@Ahk2Exe-SetName elModo7's Tunnel Manager
 ;@Ahk2Exe-SetDescription SSH Tunnel Manager for proxying`, securing and pivoting.
-;@Ahk2Exe-SetVersion 1.3.3
-;@Ahk2Exe-SetCopyright Copyright (c) 2025`, elModo7
+;@Ahk2Exe-SetVersion 1.3.4
+;@Ahk2Exe-SetCopyright Copyright (c) 2025`, elModo7 / VictorDevLog
 ;@Ahk2Exe-SetOrigFilename Tunnel Manager.exe
 ; INITIALIZE
 ; *******************************
@@ -77,7 +77,7 @@ FUTURE PLANS:
 #MaxHotkeysPerInterval, 999 ; Not really used but in case other programs may send hotkeys really fast ignoring this line could be an issue
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines, -1
-global version := "1.3.3"
+global version := "1.3.4"
 global isVisible := 1
 global cmdProxy, programData, programDataJson, notificationsData, notificationsDataJson, profile, mytcp
 
@@ -233,11 +233,17 @@ if(programData.console_enabled){
 	neutron.wnd.disableConsole()
 }
 
+if(programData.pivoting_enabled){
+	neutron.wnd.enablePivoting()
+}else{
+	neutron.wnd.disablePivoting()
+}
+
 OnExit, ExitSub
 
 if(!nogui){
 	neutron.doc.getElementById("programDataJson").innerHTML := programDataJson ; Hidden Variable so that JS creates the table
-	Gui, Show, w1200 h500, Tunnel Manager - elModo7 Soft
+	Gui, Show, w1200 h550, Tunnel Manager - elModo7 Soft
 }
 
 if(startHidden)
@@ -341,6 +347,12 @@ saveServerSettings(unhandledParam := ""){
 	}else{
 		programData.console_enabled := 0
 	}
+	
+	if (neutron.doc.getElementById("pivoting_enabled_span").innerHTML == "Pivoting Enabled") {
+		programData.pivoting_enabled := 1
+	} else {
+		programData.pivoting_enabled := 0
+	}
 	FileDelete, %profile%
 	programDataJson := JSON.Dump(programData)
 	FileAppend, % programDataJson, %profile%, UTF-8
@@ -400,6 +412,7 @@ runTunnelThread:
 				StringUpper, type, % tunnel.type
 				tunnel.type := type
 				str_tunnels .= "-" tunnel.type " "
+				local_interface := programData.pivoting_enabled ? "0.0.0.0:" : "127.0.0.1" ; Listen on all interfaces
 				if(tunnel.type == "L" || tunnel.type == "R"){
 					if(tunnel.source_port == ""){
 						showErrorModal("Rule Configuration Error:", "Error in Source Port, undefined source port.")
@@ -422,7 +435,7 @@ runTunnelThread:
 						showErrorModal("Rule Configuration Error:", "Error in Destination Port, source port has to be below 0 and lower than 65535:" destinationTmp[2])
 						return
 					}
-					str_tunnels .= tunnel.source_port ":" tunnel.destination " "
+					str_tunnels .= local_interface tunnel.source_port ":" tunnel.destination " "
 				}else if(tunnel.type == "D"){
 					if(tunnel.source_port == ""){
 						showErrorModal("Rule Configuration Error:", "Error in Source Port, undefined source port.")
@@ -431,7 +444,7 @@ runTunnelThread:
 						showErrorModal("Rule Configuration Error:", "Error in Source Port, source port has to be below 0 and lower than 65535: " tunnel.source_port)
 						return
 					}
-					str_tunnels .= tunnel.source_port
+					str_tunnels .= local_interface tunnel.source_port
 				}else{
 					showErrorModal("Rule Configuration Error:", "Error in Tunnel Type, must be R, L or D.")
 					return

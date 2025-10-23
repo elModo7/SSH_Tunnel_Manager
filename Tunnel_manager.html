@@ -72,6 +72,13 @@
 				event.stopImmediatePropagation();
 				toggleConsole(); 
 			});
+			
+			$("#pivoting_enabled").click(function(){ 
+				event.preventDefault();
+				event.stopPropagation();
+				event.stopImmediatePropagation();
+				togglePivoting(); 
+			});
 		});
 		
 		function refreshProgramData(){
@@ -324,8 +331,8 @@
 				$("#ico_toggle_console").addClass("fa-toggle-off");
 				$("#ico_toggle_console").removeClass("fa-toggle-on");
 			}
-		}
-		
+		}		
+				
 		function enableConsole(){
 			$("#console_enabled_span").text("Console Output Enabled");
 			$("#ico_toggle_console").addClass("text-success");
@@ -341,12 +348,44 @@
 			$("#ico_toggle_console").addClass("fa-toggle-off");
 			$("#ico_toggle_console").removeClass("fa-toggle-on");
 		}
+		
+		function togglePivoting(){
+			if($("#ico_pivoting_enabled").hasClass("text-danger")){
+				$("#pivoting_enabled_span").text("Pivoting Enabled");
+				$("#ico_pivoting_enabled").addClass("text-success");
+				$("#ico_pivoting_enabled").removeClass("text-danger");
+				$("#ico_pivoting_enabled").addClass("fa-toggle-on");
+				$("#ico_pivoting_enabled").removeClass("fa-toggle-off");
+			}else{
+				$("#pivoting_enabled_span").text("Pivoting Disabled");
+				$("#ico_pivoting_enabled").addClass("text-danger");
+				$("#ico_pivoting_enabled").removeClass("text-success");
+				$("#ico_pivoting_enabled").addClass("fa-toggle-off");
+				$("#ico_pivoting_enabled").removeClass("fa-toggle-on");
+			}
+		}
+		
+		function enablePivoting(){
+			$("#pivoting_enabled_span").text("Pivoting Enabled");
+			$("#ico_pivoting_enabled").addClass("text-success");
+			$("#ico_pivoting_enabled").removeClass("text-danger");
+			$("#ico_pivoting_enabled").addClass("fa-toggle-on");
+			$("#ico_pivoting_enabled").removeClass("fa-toggle-off");
+		}		
+		
+		function disablePivoting(){
+			$("#pivoting_enabled_span").text("Pivoting Disabled");
+			$("#ico_pivoting_enabled").addClass("text-danger");
+			$("#ico_pivoting_enabled").removeClass("text-success");
+			$("#ico_pivoting_enabled").addClass("fa-toggle-off");
+			$("#ico_pivoting_enabled").removeClass("fa-toggle-on");
+		}
 	</script>
 	</head>
 	<body class="d-flex flex-column main_body">
 	  <header>
 		<div class="d-flex align-items-stretch bg-dark text-white" oncontextmenu="return false;">
-		  <span class="flex-grow-1 px-2 py-1" onmousedown="neutron.DragTitleBar()">Tunnel Manager - elModo7 v1.3.3</span>
+		  <span class="flex-grow-1 px-2 py-1" onmousedown="neutron.DragTitleBar()">Tunnel Manager - elModo7 / VictorDevLog v1.3.4</span>
 		  <span class="title-btn" onclick="neutron.Minimize()">0</span>
 		  <span class="title-btn" onclick="neutron.Maximize()">1</span>
 		  <span class="title-btn title-btn-close" onclick="neutron.Close()">r</span>
@@ -420,6 +459,7 @@
 					<input type="password" class="form-control col-md-8 bg-dark text-white" id="password_field">
 				  </div>
 				  <label style="margin-top:-20px;" for="console_enabled" class="col-form-label ml-4 col-md-12"><button id="console_enabled" class='btn btn-link border-0'><i id="ico_toggle_console" class='fa fa-toggle-on text-success' style='font-size:22px;'></i></button><span id="console_enabled_span">Console Output Enabled</span></label>
+				   <label style="margin-top:-20px;" for="pivoting_enabled" class="col-form-label ml-4 col-md-12"><button id="pivoting_enabled" class='btn btn-link border-0'><i id="ico_pivoting_enabled" class='fa fa-toggle-on text-success' style='font-size:22px;'></i></button><span id="pivoting_enabled_span">Pivoting Enabled</span></label>
 				</form>
 			  </div>
 			  <div class="modal-footer">
