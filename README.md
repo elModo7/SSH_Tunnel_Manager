@@ -22,6 +22,7 @@ You can also **download from this document.**
 |Version| Download |
 |--|--|
 | `Latest` | [`Download Link`](https://github.com/elModo7/Tunnel_Manager/releases/latest/download/Tunnel.Manager.exe)  |
+| 1.3.4 | [Download Link](https://github.com/elModo7/SSH_Tunnel_Manager/releases/download/1.3.4/Tunnel.Manager.1.3.4.zip)  |
 | 1.3.3 | [Download Link](https://github.com/elModo7/SSH_Tunnel_Manager/releases/download/1.3.3/Tunnel.Manager.exe)  |
 | 1.3.0 | [Download Link](https://github.com/elModo7/Tunnel_Manager/releases/download/1.3.0/TunnelManager.zip)  |
 | 1.2.29 | [Download Link](https://github.com/elModo7/Tunnel_Manager/releases/download/1.2.29/TunnelManager.zip)  |
