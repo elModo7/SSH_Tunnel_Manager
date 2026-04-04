@@ -1,9 +1,9 @@
 ﻿global compiledForConsole := 0 ; ¡¡Important!! Depending on how you want to compile the script, output will be given via console (Chalk) or native MsgBox
-; Last changed date: 23/10/2025 19:15
+; Last changed date: 04/04/2026 18:45
 ; OS Version ...: Windows 10 x64 and Above (Support not guaranteed on Windows 7)
 ;@Ahk2Exe-SetName elModo7's Tunnel Manager
 ;@Ahk2Exe-SetDescription SSH Tunnel Manager for proxying`, securing and pivoting.
-;@Ahk2Exe-SetVersion 1.3.4
+;@Ahk2Exe-SetVersion 1.3.5
 ;@Ahk2Exe-SetCopyright Copyright (c) 2025`, elModo7 / VictorDevLog
 ;@Ahk2Exe-SetOrigFilename Tunnel Manager.exe
 ; INITIALIZE
@@ -77,10 +77,13 @@ FUTURE PLANS:
 #MaxHotkeysPerInterval, 999 ; Not really used but in case other programs may send hotkeys really fast ignoring this line could be an issue
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines, -1
-global version := "1.3.4"
+global version := "1.3.5"
 global isVisible := 1
 global cmdProxy, programData, programDataJson, notificationsData, notificationsDataJson, profile, mytcp
+global plinkExe := "proxy.exe"
+global plinkPath := A_Temp
 
+checkOverrides() ; Custom override config
 plinkPromptDownload() ; PLink install
 FileInstall, lib/quricol64.dll, % A_Temp "\quricol64.dll", 0 ; Install but do not overwrite quircol64.dll
 FileCreateDir, % A_Temp "\Tunnel_Manager"
@@ -182,13 +185,13 @@ if(!nogui){
 	neutron.Show("w1200 h500")
 }
 
-if(ProcessExist("proxy.exe")){
+if(ProcessExist(plinkExe)){
 	OnMessage(0x44, "OnMsgBox")
 	MsgBox 0x2, Proxy is already running!, A previous instance of the Proxy has been detected.`nIt is recommended to close previous instances before continuing.`n`nWhat will you do?
 	OnMessage(0x44, "")
 	IfMsgBox Abort, {
 		; Close previous instance of Proxy
-		RunWait, taskkill /IM proxy.exe /F,, Hide
+		RunWait, taskkill /IM %plinkExe% /F,, Hide
 	} Else IfMsgBox Retry, {
 		; Continue Anyways
 	} Else IfMsgBox Ignore, {
@@ -374,7 +377,7 @@ runTunnel(unhandledParam := ""){
 		programData := JSON.Load(neutron.doc.getElementById("programDataJson").innerHTML)
 	}
 	sendNotificationOnce := 1
-	RunWait, taskkill /IM proxy.exe /F,, Hide
+	RunWait, taskkill /IM %plinkExe% /F,, Hide
 	if(!tunneling){
 		tunneling := 1
 		setTrayTunneling()
@@ -395,12 +398,12 @@ stopTunnel(unhandledParam := ""){
 	SetTimer, runTunnelThread, Off
 	tunneling := 0
 	setTrayTunneling()
-	RunWait, taskkill /IM proxy.exe /F,, Hide
+	RunWait, taskkill /IM %plinkExe% /F,, Hide
 	sendNotifications("Tunnel Manager", A_ComputerName "_" A_UserName " - Tunnel Manager Stopped")
 }
 
 runTunnelThread:
-	if(!ProcessExist("proxy.exe"))
+	if(!ProcessExist(plinkExe))
 	{
 		passwd := Crypt.Decrypt.String("AES", "ECB", programData.proxy_password, "elModo7Soft-2023")
 		str_tunnels := ""
@@ -412,7 +415,7 @@ runTunnelThread:
 				StringUpper, type, % tunnel.type
 				tunnel.type := type
 				str_tunnels .= "-" tunnel.type " "
-				local_interface := programData.pivoting_enabled ? "0.0.0.0:" : "127.0.0.1" ; Listen on all interfaces
+				local_interface := programData.pivoting_enabled ? "0.0.0.0:" : "127.0.0.1:" ; Listen on all interfaces
 				if(tunnel.type == "L" || tunnel.type == "R"){
 					if(tunnel.source_port == ""){
 						showErrorModal("Rule Configuration Error:", "Error in Source Port, undefined source port.")
@@ -473,8 +476,9 @@ runTunnelThread:
 			showErrorModal("Rule Configuration Error:", "No tunnels created or none active found!")
 			return
 		}
-		cmdProxy := A_Temp "\proxy.exe " str_tunnels " -N -batch -no-antispoof -pw " passwd " " programData.proxy_user "@" programData.proxy_ip " -P " programData.proxy_port
-		cmdProxyAcceptKey := "cmd /c echo yes | " A_Temp "\proxy.exe -agent -pw " passwd " " programData.proxy_user "@" programData.proxy_ip " -P " programData.proxy_port
+		cmdProxy := """" plinkPath "\" plinkExe """ " str_tunnels " -N -batch -no-antispoof -pw " passwd " " programData.proxy_user "@" programData.proxy_ip " -P " programData.proxy_port
+		clipboard := cmdProxy
+		cmdProxyAcceptKey := "cmd /c echo yes | " plinkPath "\" plinkExe " -agent -pw " passwd " " programData.proxy_user "@" programData.proxy_ip " -P " programData.proxy_port
 		if(!programData.accepted_key){
 			RunWait, %cmdProxyAcceptKey%,, % programData.console_enabled ? "" : "Hide" ; Automatically accepts key of SSH Server once
 			programData.accepted_key := "1"
@@ -642,18 +646,40 @@ lookForUpdates:
 	neutron.wnd.showVersionCheckModal()
 return
 
+checkOverrides() {
+	global
+	if(FileExist("overrides.conf")) {
+		Fileread, overrides, overrides.conf
+		Loop, Parse, overrides, `n
+		{
+			StringReplace, row, % A_LoopField, `n,, All
+			StringReplace, row, % row, `r,, All
+			row := Trim(row)
+			if(row == "" || SubStr(row, 1, 1) == "#") {
+				continue
+			}
+			rowData := StrSplit(row, "=")
+			Switch rowData[1]
+			{
+				Case "plink":
+					SplitPath, % rowData[2], plinkExe, plinkPath
+			}
+		}
+	}
+}
+
 plinkPromptDownload(){
 	global
 	; 1.2.28 GitHub sometimes has issues with compiled files on the repo, add download
-	if(!FileExist(A_Temp "\proxy.exe")){
+	if(!FileExist(plinkPath "\" plinkExe)){
 		OnMessage(0x44, "OnMsgBoxPromptPlink")
 		MsgBox 0x31, PLink.exe not found, This software requires plink.exe to run`, you can either download the latest version or use the built in one (recommended).`n
 		OnMessage(0x44, "")
 
 		IfMsgBox OK, {
-			FileInstall, lib/proxy.exe, % A_Temp "\proxy.exe", 0 ; 1.2.28: Do not replace Plink each time
+			FileInstall, lib/proxy.exe, % plinkPath "\" plinkExe, 0 ; 1.2.28: Do not replace Plink each time
 		} Else IfMsgBox Cancel, {
-			DownloadFile("https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe", A_Temp "\proxy.exe")
+			DownloadFile("https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe", plinkPath "\" plinkExe)
 		}
 	}
 }
@@ -758,7 +784,7 @@ return
 NeutronClose:
 GuiClose:
 ExitSub:
-	RunWait, taskkill /IM proxy.exe /F,, Hide
+	RunWait, taskkill /IM %plinkExe% /F,, Hide
 ExitApp
 
 showAboutScreen:
